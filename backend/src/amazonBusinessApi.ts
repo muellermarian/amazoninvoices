@@ -1,12 +1,15 @@
+// Load environment variables
 import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
 import axios from "axios";
+import fetch, { Headers } from "node-fetch";
 
 const app = express();
 app.use(express.json());
 
+// Environment variables
 const {
   AMAZON_CLIENT_ID,
   AMAZON_CLIENT_SECRET,
@@ -22,6 +25,7 @@ if (!AMAZON_CLIENT_ID || !AMAZON_CLIENT_SECRET || !AMAZON_REFRESH_TOKEN) {
 let cachedToken: string | null = null;
 let tokenExpiresAt = 0;
 
+// Retrieve and cache access token
 async function getAccessToken() {
   if (cachedToken && Date.now() < tokenExpiresAt) {
     return cachedToken;
@@ -31,7 +35,6 @@ async function getAccessToken() {
   params.append("refresh_token", AMAZON_REFRESH_TOKEN!);
   params.append("client_id", AMAZON_CLIENT_ID!);
   params.append("client_secret", AMAZON_CLIENT_SECRET!);
-
   const response = await axios.post(
     "https://api.amazon.com/auth/O2/token",
     params,
@@ -44,28 +47,33 @@ async function getAccessToken() {
   return cachedToken;
 }
 
-// Example endpoint: Get static sandbox document list
-app.get("/api/documents", async (req, res) => {
+// GET /api/reports - Retrieve example reports from Amazon Business API Sandbox
+app.get("/api/reports", async (req, res) => {
   try {
     const accessToken = await getAccessToken();
-    const result = await axios.get(
-      `${AMAZON_API_BASE_URL}/documents/v1/documents`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        params: {
-          // Add required sandbox params here if needed
-        },
-      }
-    );
-    res.json(result.data);
+    if (!accessToken) {
+      return res.status(500).json({ error: "No access token received" });
+    }
+    const headers = new Headers();
+    // Amazon SP-API expects the LWA token in the x-amz-access-token header
+    headers.append("x-amz-access-token", accessToken);
+    headers.append("Content-Type", "application/json");
+    headers.append("User-Agent", "MyApp/1.0 (Language=NodeJS)");
+    const url = `${AMAZON_API_BASE_URL}/reports/2021-09-30/reports?reportTypes=FEE_DISCOUNTS_REPORT,GET_AFN_INVENTORY_DATA&processingStatuses=IN_QUEUE,IN_PROGRESS`;
+    const response = await fetch(url, { method: "GET", headers });
+    const data = await response.json();
+    if (!response.ok) {
+      const error = new Error(`Status ${response.status}`);
+      (error as any).response = { data };
+      throw error;
+    }
+    res.json(data);
   } catch (err: any) {
     res.status(500).json({ error: err.message, details: err.response?.data });
   }
 });
 
+// Start the Express server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Amazon Business API Sandbox backend running on port ${PORT}`);
