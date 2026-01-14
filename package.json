@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@types/axios": "^0.9.36",
-    "axios": "^1.13.2"
-  },
-  "devDependencies": {
-    "tailwindcss": "^4.1.18"
-  }
-}
