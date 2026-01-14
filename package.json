@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run amazon-sandbox\" \"cd frontend && npm run dev\"",
+    "install:all": "cd backend && npm i && cd ../frontend && npm i"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
