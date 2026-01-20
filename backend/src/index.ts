@@ -10,6 +10,7 @@ axios.defaults.headers.common["User-Agent"] = "MyApp/1.0";
 const app = express();
 app.use(express.json());
 
+// Load environment variables
 const {
   AMAZON_CLIENT_ID,
   AMAZON_CLIENT_SECRET,
@@ -89,13 +90,11 @@ app.post("/api/exchange-code", async (req, res) => {
       message: "Speichere refresh_token in .env!",
     });
   } catch (err: any) {
-    res
-      .status(500)
-      .json({
-        error:
-          err?.response?.data ||
-          (err instanceof Error ? err.message : String(err)),
-      });
+    res.status(500).json({
+      error:
+        err?.response?.data ||
+        (err instanceof Error ? err.message : String(err)),
+    });
   }
 });
 
