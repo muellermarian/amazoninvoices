@@ -40,10 +40,10 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 flex flex-col items-center justify-start p-4 sm:p-8">
+    <div className="min-h-screen w-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 flex flex-col items-center justify-start p-4 sm:p-8">
       <div className="w-full max-w-6xl h-[calc(100vh-4rem)] bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white">
+        <div className="bg-linear-to-r from-indigo-600 to-purple-600 p-8 text-white">
           <h1 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">
             Amazon Business
           </h1>
@@ -84,11 +84,11 @@ export default function App() {
           {!loading && !error && reports.length > 0 && (
             <div className="flex-1 overflow-hidden flex flex-col">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-indigo-500 to-blue-600 p-6 rounded-2xl text-white text-center">
+                <div className="bg-linear-to-br from-indigo-500 to-blue-600 p-6 rounded-2xl text-white text-center">
                   <div className="text-3xl font-bold">{reports.length}</div>
                   <div className="text-sm opacity-90">Total Reports</div>
                 </div>
-                <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-2xl text-white text-center">
+                <div className="bg-linear-to-br from-green-500 to-emerald-600 p-6 rounded-2xl text-white text-center">
                   <div className="text-3xl font-bold">
                     {
                       reports.filter((r) => r.processingStatus === "DONE")
@@ -102,7 +102,7 @@ export default function App() {
               <div className="flex-1 overflow-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-gradient-to-r from-gray-50 to-gray-100 sticky top-0">
+                    <tr className="bg-linear-to-r from-gray-50 to-gray-100 sticky top-0">
                       <th className="p-4 text-left font-semibold text-gray-700 border-b border-gray-200">
                         Report ID
                       </th>
@@ -135,7 +135,7 @@ export default function App() {
                         <td className="p-4">
                           <span
                             className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                              r.processingStatus
+                              r.processingStatus,
                             )}`}
                           >
                             {r.processingStatus.replace("_", " ").toUpperCase()}
@@ -154,7 +154,7 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <div className="bg-gradient-to-r from-slate-50 to-gray-100 p-4 text-xs text-gray-500 text-center border-t border-gray-200">
+        <div className="bg-linear-to-r from-slate-50 to-gray-100 p-4 text-xs text-gray-500 text-center border-t border-gray-200">
           Amazon Business API Sandbox • localhost:3001/api/reports
         </div>
       </div>

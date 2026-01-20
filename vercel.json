@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/callback", "destination": "/callback" }
+    { "source": "/api/(.*)", "destination": "/backend/src/index.js" },
+    { "source": "/callback", "destination": "/backend/src/index.js" }
   ]
 }
